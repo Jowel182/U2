@@ -14,12 +14,14 @@ namespace ExampleProject.Selenium
         {
             NetworkAuthenticationHandler handler = new NetworkAuthenticationHandler()
             {
-                //add credentials
+                UriMatcher = d => d.Host.Contains(url),
+                Credentials = new PassWordCredentials("admin","admin")
             };
 
             networkInterceptor = driver.Manage().Network;
             networkInterceptor.AddAuthenticationHandler(handler);
-            //start monitoring
+            networkInterceptor.StartMonitoring();
+        
         }
 
         [Test]
@@ -30,5 +32,12 @@ namespace ExampleProject.Selenium
         }
 
         //stop monitoring
+        [TearDown]
+        public void TearItDown()
+        {
+
+            networkInterceptor.StopMonitoring();
+        
+        }
     }
 }
